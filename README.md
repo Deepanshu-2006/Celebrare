@@ -122,7 +122,7 @@ Celebrare/
 │   └── main.jsx                 # Application entry point
 ├── .gitignore                   # Files and directories excluded from Git
 ├── .oxlintrc.json               # Oxlint configuration
-├── index.html                   # HTML template with Inter font import
+├── index.html                   # HTML template with Manrope and DM Sans Google Fonts imports
 ├── package.json                 # Project dependencies, metadata, and scripts
 ├── package-lock.json            # Exact dependency lockfile
 ├── README.md                    # Project documentation

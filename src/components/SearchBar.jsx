@@ -1,6 +1,6 @@
 function SearchBar({ value, onChange }) {
   return (
-    <div className="animate-intro-4 mb-6 sm:mb-8 max-w-md w-full">
+    <div className="animate-intro-4 fluid-search-spacing max-w-md w-full">
       <label htmlFor="photographer-search" className="sr-only">
         Search photographers by name
       </label>

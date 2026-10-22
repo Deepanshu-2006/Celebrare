@@ -66,7 +66,7 @@ function PhotoCard({ photo, isFavourite = false, onToggleFavourite }) {
           <p className="text-[11px] uppercase tracking-wider text-[#737373] font-medium mb-0.5">
             Photographer
           </p>
-          <h2 className="text-sm font-semibold text-[#181818] truncate" title={photo.author}>
+          <h2 className="font-heading text-sm font-semibold text-[#181818] truncate" title={photo.author}>
             {photo.author}
           </h2>
         </div>

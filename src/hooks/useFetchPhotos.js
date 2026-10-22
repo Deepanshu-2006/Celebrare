@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 
 const PICSUM_API_URL = 'https://picsum.photos/v2/list?limit=30'
+const MINIMUM_LOADING_DELAY_MS = 2000
 
 /**
  * Custom React hook to fetch photos from the Picsum Photos API.
@@ -21,9 +22,18 @@ export function useFetchPhotos() {
       setError(null)
 
       try {
-        const response = await fetch(PICSUM_API_URL, {
-          signal: controller.signal,
-        })
+        const [response] = await Promise.all([
+          fetch(PICSUM_API_URL, {
+            signal: controller.signal,
+          }),
+          new Promise((resolve, reject) => {
+            const timer = setTimeout(resolve, MINIMUM_LOADING_DELAY_MS)
+            controller.signal.addEventListener('abort', () => {
+              clearTimeout(timer)
+              reject(new DOMException('Aborted', 'AbortError'))
+            })
+          }),
+        ])
 
         if (!response.ok) {
           throw new Error(`Failed to fetch photos (HTTP ${response.status}: ${response.statusText || 'Error'})`)

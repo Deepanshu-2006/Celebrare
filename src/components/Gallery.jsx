@@ -52,14 +52,14 @@ function Gallery() {
   if (loading) {
     return (
       <div
-        className="flex flex-col items-center justify-center py-24 sm:py-32 px-4 text-center"
+        className="flex flex-col items-center justify-center min-h-[420px] sm:min-h-[480px] w-full px-4 text-center"
         aria-live="polite"
         aria-busy="true"
       >
         <div
-          className="w-7 h-7 border-2 border-[#287A55]/20 border-t-[#287A55] rounded-full animate-spin mb-4"
+          className="w-8 h-8 rounded-full border-2 border-[#EAEAE7] border-t-[#287A55] animate-spin mb-3.5"
           role="status"
-          aria-label="Loading"
+          aria-label="Loading photos"
         />
         <p className="text-sm font-medium text-[#737373]">Loading photos…</p>
       </div>

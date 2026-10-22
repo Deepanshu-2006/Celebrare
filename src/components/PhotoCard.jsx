@@ -1,19 +1,64 @@
+import { useState } from 'react'
+
 function PhotoCard({ photo, isFavourite = false, onToggleFavourite }) {
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [hasError, setHasError] = useState(false)
+
   const handleClick = () => {
     if (onToggleFavourite) {
       onToggleFavourite(photo.id)
     }
   }
 
+  // Derive an appropriately dimensioned 4:3 (800x600) image URL from the photo object
+  // to prevent loading massive ~20MP master images that stall the main thread during scrolling.
+  const imageUrl = photo?.download_url
+    ? photo.download_url.replace(/\/\d+\/\d+$/, '/800/600')
+    : photo?.id
+      ? `https://picsum.photos/id/${photo.id}/800/600`
+      : ''
+
   return (
     <article className="group bg-white rounded-xl border border-[#EAEAE7] overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-shadow duration-200 flex flex-col">
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-neutral-100">
-        <img
-          src={photo.download_url}
-          alt={`Photograph by ${photo.author}`}
-          loading="lazy"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
-        />
+        {hasError || !imageUrl ? (
+          <div
+            className="w-full h-full flex flex-col items-center justify-center p-4 bg-neutral-100 text-[#737373] text-center select-none"
+            role="img"
+            aria-label={`Image unavailable for photograph by ${photo.author || 'unknown author'}`}
+          >
+            <svg
+              className="w-8 h-8 text-neutral-400 mb-1.5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+              <circle cx="9" cy="9" r="2" />
+              <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+            </svg>
+            <span className="text-xs font-medium text-neutral-500">Image unavailable</span>
+          </div>
+        ) : (
+          <img
+            src={imageUrl}
+            alt={`Photograph by ${photo.author}`}
+            width="800"
+            height="600"
+            loading="lazy"
+            decoding="async"
+            onLoad={() => setIsLoaded(true)}
+            onError={() => setHasError(true)}
+            className={`w-full h-full object-cover group-hover:scale-105 transition-[transform,opacity] duration-300 ease-out ${
+              isLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        )}
       </div>
 
       <div className="p-4 flex items-center justify-between gap-3">
